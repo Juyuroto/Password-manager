@@ -29,7 +29,7 @@ Un gestionnaire de mots de passe moderne, sécurisé et auto-hébergé. Alternat
 
 ---
 
-## Structure du projet
+## Structure du projetrepository
 
 ```
 lockbox/
@@ -50,9 +50,12 @@ lockbox/
 ├── frontend/
 │   ├── src/
 │   │   ├── components/
+│   │   ├── assets/
 │   │   ├── pages/
 │   │   ├── hooks/
-│   │   └── services/
+│   │   ├── services/
+│   │   ├── App.jsx/
+│   │   └── main.jsx/
 │   ├── public/
 │   ├── Dockerfile
 │   └── package.json
