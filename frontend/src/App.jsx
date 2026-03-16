@@ -5,12 +5,15 @@ import './assets/css/App.css'
 import Header from './components/home/header'
 import Main from './components/home/main'
 import Footer from './components/home/footer'
+import VaultPage from './pages/vault'
 
 function App() {
+  const isVaultPage = window.location.pathname === '/vault'
+
   return (
     <div className='app'>
       <Header />
-      <Main />
+      {isVaultPage ? <VaultPage /> : <Main />}
       <Footer />
     </div>
   )

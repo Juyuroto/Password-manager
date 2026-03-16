@@ -106,6 +106,50 @@
 	color: var(--color-darkest);
 }
 
+.password-form {
+	display: grid;
+	gap: 0.85rem;
+	width: min(360px, 100%);
+	margin: 0 auto;
+}
+
+.password-form input {
+	width: 100%;
+	padding: 0.75rem 0.9rem;
+	border-radius: 10px;
+	border: 1px solid rgba(13, 106, 12, 0.2);
+	background: rgba(255, 255, 255, 0.9);
+	color: var(--color-darkest);
+	font-size: 1rem;
+	outline: none;
+	transition: box-shadow 150ms ease, border-color 150ms ease;
+}
+
+.password-form input:focus {
+	border-color: rgba(13, 106, 12, 0.5);
+	box-shadow: 0 0 0 3px rgba(110, 239, 108, 0.25);
+}
+
+.login-status {
+	margin: 1rem 0 0;
+	font-weight: 600;
+	color: var(--color-darker);
+}
+
+.login-status.error {
+	color: #9f1a1a;
+}
+
+.vault-card {
+	max-width: 560px;
+}
+
+.vault-user {
+	margin-top: 0.4rem;
+	font-weight: 700;
+	color: var(--color-darkest);
+}
+
 .login-btn {
 	display: inline-flex;
 	align-items: center;
