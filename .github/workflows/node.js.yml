@@ -1,0 +1,39 @@
+name: Node.js CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 22.x]
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    
+    env:
+      Frontend_Port: ${{ secrets.Frontend_Port }}
+      Frontend_URL: ${{ secrets.Frontend_URL }}
+      Backend_API_URL: ${{ secrets.Backend_API_URL }}
+
+    steps:
+      - name: Recorporer le code du dépôt
+        uses: actions/checkout@v4
+
+      - name: Configurer Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Installer les dépendances Frontend
+        run: |
+          cd frontend
+          npm install
+
+      - name: Compiler l'application React (Build)
+        run: |
+          cd frontend
+          npm run build
