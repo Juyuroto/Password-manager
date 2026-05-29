@@ -1,0 +1,37 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  docker-check:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    steps:
+          - name: Recorporer le code du dépôt
+            uses: actions/checkout@v4
+    
+          - name: Configurer Docker Buildx
+            uses: docker/setup-buildx-action@v3
+    
+          - name: Tester la construction image Docker du Backend
+            uses: docker/build-push-action@v5
+            with:
+              context: ./backend
+              file: ./backend/dockerfile
+              push: false 
+              tags: lokia-backend:test
+    
+          - name: Tester la construction image Docker du Frontend
+            uses: docker/build-push-action@v5
+            with:
+              context: ./frontend
+              file: ./frontend/dockerfile
+              push: false 
+              tags: lokia-frontend:test
