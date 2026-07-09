@@ -1,15 +1,15 @@
 services:
   database:
-    image: postgres:latest
+    image: postgres:17-alpine
     container_name: database
-    volumes:
-      - db:/var/lib/postgresql/data
     environment:
-      PostgreUser: ${PostgreUser}
-      PostgrePassword: ${PostgrePassword}
-      PostgreHost: ${PostgreHost}
+      POSTGRES_USER: ${PostgreUser}
+      POSTGRES_PASSWORD: ${PostgrePassword}
+      POSTGRES_DB: ${PostgreName}
     ports:
       - "${PostgrePort}:5432"
+    volumes:
+      - db:/var/lib/postgresql/data
     networks:
       - Network
     healthcheck:
@@ -30,8 +30,12 @@ services:
       - PostgreUser=${PostgreUser}
       - PostgrePassword=${PostgrePassword}
       - PostgreHost=${PostgreHost}
-      - PostgrePort=${PostgrePort}
+      - PostgrePort=${PostgreInternalPort}
       - PostgreName=${PostgreName}
+      - BACKEND_PORT=${Backend_Port}
+      - FRONTEND_URL=${Frontend_URL}
+      - DEFAULT_USER_NAME=${Default_User_Name}
+      - DEFAULT_USER_PASSWORD=${Default_User_Password}
     depends_on:
       database:
         condition: service_healthy
@@ -47,13 +51,13 @@ services:
     ports:
       - "${Frontend_Port}:3300"
     environment:
-      Backend_API_URL: ${Backend_API_URL}
+      VITE_API_URL: ${Backend_API_URL}
       Frontend_Port: ${Frontend_Port}
     depends_on:
       - backend
     volumes:
       - ./frontend:/app:Z
-      - /app/node_module
+      - /app/node_modules
     networks:
       - Network
 

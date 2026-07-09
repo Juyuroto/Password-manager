@@ -1,13 +1,46 @@
-// CSS
+// src/App.jsx
 import "./assets/css/App.css";
 
-// Components
+// Pages & Components
+import Login from "./pages/Login";
+import ProtectedRoute from "./components/ProtectedRoute";
+import Dashboard from "./pages/Dashboard";
+import PageTransition from "./components/PageTransition";
+import LoadingSpinner from "./components/LoadingSpinner";
+
+// React
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { Suspense } from 'react';
 
 function App() {
   return (
-    <div className="app">
+    <Router>
+      <div className="app">
 
-    </div>
+        <Suspense fallback={<LoadingSpinner />}>
+          <Routes>
+            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+            
+            <Route path="/login" element={
+              <PageTransition>
+                <Login />
+              </PageTransition>
+            } />
+            
+            <Route 
+              path="/dashboard" 
+              element={
+                <ProtectedRoute>
+                  <PageTransition>
+                    <Dashboard />
+                  </PageTransition>
+                </ProtectedRoute>
+              } 
+            />
+          </Routes>
+        </Suspense>
+      </div>
+    </Router>
   );
 }
 
