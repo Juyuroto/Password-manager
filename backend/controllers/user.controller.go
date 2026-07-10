@@ -21,7 +21,7 @@ func LoginUserController(c *gin.Context) {
 	var input struct {
         Name    	string 		`json:"name"`
         Password 	string 		`json:"password"`
-    }
+    } 
     
     if err := c.ShouldBindJSON(&input); err != nil {
         c.JSON(400, gin.H{"error": "Données invalides"})
