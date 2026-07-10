@@ -19,8 +19,8 @@ func GetUserController(c *gin.Context) {
 func LoginUserController(c *gin.Context) {
 	
 	var input struct {
-        Name    string `json:"name"`
-        Password string `json:"password"`
+        Name    	string 		`json:"name"`
+        Password 	string 		`json:"password"`
     }
     
     if err := c.ShouldBindJSON(&input); err != nil {

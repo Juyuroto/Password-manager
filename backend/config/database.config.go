@@ -30,13 +30,13 @@ func DatbaseConnexion() {
 		log.Fatal("Impossible de se connecter à la base de données :", err)
 	}
 
-	db.AutoMigrate(&models.User{})
+	err = db.AutoMigrate(&models.User{}, &models.Folder{}, &models.Password{})
 
-	if db.Migrator().HasTable(&models.User{}) {
-		log.Println("Table 'users' bien créée")
-	} else {
-			log.Fatal("La table 'users' n'a pas été créée")
+	if err != nil {
+		log.Fatal("Erreur lors de la migration des tables : ", err)
 	}
+
+	log.Println("Les tables ont bien été créées !")
 
 	DB = db
 
