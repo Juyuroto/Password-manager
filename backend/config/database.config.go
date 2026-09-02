@@ -54,7 +54,7 @@ func seedDefaultUser() {
 		}
 
 		defaultUser := models.User{
-			Name:     os.Getenv("DEFAULT_USER_NAME"),
+			Email:     os.Getenv("DEFAULT_USER_NAME"),
 			Password: hashedPassword,
 		}
 

@@ -1,6 +1,6 @@
 # Lockbox
 
-Un gestionnaire de mots de passe moderne, sécurisé et auto-hébergé. Alternative open-source à Keeper, construit avec Go, React, PostgreSQL et Docker.
+Un gestionnaire de mots de passe moderne et sécurisé. Cconstruit avec Go, React, PostgreSQL et Docker.
 
 ---
 
@@ -29,37 +29,101 @@ Un gestionnaire de mots de passe moderne, sécurisé et auto-hébergé. Alternat
 
 ---
 
+## Architecture système code
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                      INTERNET                           │
+└─────────────────────────┬───────────────────────────────┘
+                          │
+                     ┌────▼─────┐
+                     │ pfSense  │  Règles strictes, VLAN dédié
+                     └────┬─────┘
+                          │
+                ┌─────────▼──────────┐
+                │   Reverse Proxy    │  Traefik — HTTPS obligatoire
+                │   (Let's Encrypt)  │
+                └─────────┬──────────┘
+                          │
+           ┌──────────────┴────────────────┐
+           │                               │
+     ┌─────▼──────┐                ┌───────▼───────┐
+     │  Frontend  │                │   API Go/Gin  │
+     │  (React)   │◄──────────────►│               │
+     └────────────┘   HTTPS/JSON   └────────┬──────┘
+                                            │
+                                    ┌───────▼────────┐
+                                    │  PostgreSQL    │
+                                    │  (blobs        │
+                                    │   chiffrés)    │
+                                    └────────────────┘
+```
+
+## Architecture système infra
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                      INTERNET                           │
+└─────────────────────────┬───────────────────────────────┘
+                          │
+                     ┌────▼─────┐
+                     │ pfSense  │  Règles strictes, VLAN dédié
+                     └────┬─────┘
+                          │
+                ┌─────────▼──────────┐
+                │   Reverse Proxy    │  Traefik — HTTPS obligatoire
+                │   (Let's Encrypt)  │
+                └─────────┬──────────┘
+                          │
+           ┌──────────────┴────────────────┐
+           │                               │
+     ┌─────▼──────┐                ┌───────▼───────┐
+     │  Serveur   │                │   Serveur     │
+     │  Compute   │◄──────────────►│   Stockage    │
+     │            │   Requêtes SQL │ (PostgreSQL,  │
+     │            │                │  blobs        │
+     └────────────┘                │  chiffrés)    │
+                                   └───────────────┘
+ 
+```
+
+
+
+---
+
 ## Structure du projetrepository
 
 ```
 lockbox/
+├── .github/
+│   └── workflows/
+│       ├── docker-image.yml
+│       └── node.js.yml
 ├── backend/
-│   ├── cmd/
-│   │   └── server/
-│   │       └── main.go
-│   ├── internal/
-│   │   ├── auth/
-│   │   ├── crypto/
-│   │   ├── handlers/
-│   │   ├── middleware/
-│   │   ├── models/
-│   │   └── repository/
-│   ├── migrations/
-│   ├── Dockerfile
-│   └── go.mod
+│   ├── config/
+│   ├── controllers/
+│   ├── middlewares/
+│   ├── middlwares/
+│   ├── models/
+│   ├── routes/
+│   ├── services/
+│   ├── dockerfile
+│   ├── go.mod
+│   ├── go.sum
+│   └── main.go
 ├── frontend/
 │   ├── src/
 │   │   ├── components/
 │   │   ├── assets/
 │   │   ├── pages/
-│   │   ├── hooks/
 │   │   ├── services/
-│   │   ├── App.jsx/
-│   │   └── main.jsx/
+│   │   ├── App.jsx
+│   │   └── main.jsx
 │   ├── public/
 │   ├── Dockerfile
 │   └── package.json
 ├── docker-compose.yml
+├── docker-compose.dev.yml
 ├── .env.example
 └── README.md
 ```
@@ -67,9 +131,10 @@ lockbox/
 ---
 
 L'application sera disponible sur :
-- Frontend → http://localhost:3000
-- Backend API → http://localhost:8080
-- PostgreSQL → localhost:5432
+- Frontend -> http://localhost:3000
+- Backend API -> http://localhost:8080
+- PostgreSQL -> localhost:5432
+- Grand public -> https://lockbox.fr
 
 ---
 

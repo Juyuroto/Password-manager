@@ -3,6 +3,7 @@ import "./assets/css/App.css";
 
 // Pages & Components
 import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Dashboard from "./pages/Dashboard";
 import PageTransition from "./components/PageTransition";
@@ -24,6 +25,12 @@ function App() {
             <Route path="/login" element={
               <PageTransition>
                 <Login />
+              </PageTransition>
+            } />
+
+            <Route path="/signup" element={
+              <PageTransition>
+                <Signup />
               </PageTransition>
             } />
             

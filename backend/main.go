@@ -19,6 +19,8 @@ func main() {
 	router.Use(middlewares.CorsMiddleware())
 
 	routes.UserRoute(router)
+	routes.PasswordRoute(router)
+	routes.FolderRoute(router)
 
 	log.Println("[Serveur] Démarrage immédiat sur le port " + os.Getenv("BACKEND_PORT"))
 	if err := router.Run(":" + os.Getenv("BACKEND_PORT")); err != nil {

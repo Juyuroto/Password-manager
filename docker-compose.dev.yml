@@ -1,0 +1,69 @@
+services:
+  database:
+    image: postgres:17-alpine
+    container_name: database
+    environment:
+      POSTGRES_USER: ${PostgreUser}
+      POSTGRES_PASSWORD: ${PostgrePassword}
+      POSTGRES_DB: ${PostgreName}
+    ports:
+      - "${PostgrePort}:5432"
+    volumes:
+      - db:/var/lib/postgresql/data
+    networks:
+      - Network
+    healthcheck:
+      test : ["CMD-SHELL", "pg_isready -U ${PostgreUser} -d ${PostgreName}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    container_name: backend
+    build:
+      context: ./backend
+      dockerfile: dockerfile
+    restart: always
+    ports:
+      - "${Backend_Port}:3301"
+    environment:
+      - PostgreUser=${PostgreUser}
+      - PostgrePassword=${PostgrePassword}
+      - PostgreHost=${PostgreHost}
+      - PostgrePort=${PostgreInternalPort}
+      - PostgreName=${PostgreName}
+      - BACKEND_PORT=${Backend_Port}
+      - FRONTEND_URL=${Frontend_URL}
+      - DEFAULT_USER_NAME=${Default_User_Name}
+      - DEFAULT_USER_PASSWORD=${Default_User_Password}
+    depends_on:
+      database:
+        condition: service_healthy
+    networks:
+      - Network
+
+  frontend:
+    container_name: frontend
+    build:
+      context: ./frontend
+      dockerfile: dockerfile
+    restart: unless-stopped
+    ports:
+      - "${Frontend_Port}:3300"
+    environment:
+      VITE_API_URL: ${Backend_API_URL}
+      Frontend_Port: ${Frontend_Port}
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app:Z
+      - /app/node_modules
+    networks:
+      - Network
+
+
+volumes:
+  db:
+
+networks:
+  Network:

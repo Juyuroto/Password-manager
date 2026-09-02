@@ -29,6 +29,19 @@ func GetFolderByIDController(c *gin.Context) {
 
 }
 
+func GetFolderNumberPasswordController(c *gin.Context) {
+    id := c.Param("id")
+    var count int64
+
+    result := config.DB.Model(&models.Password{}).Where("folder_id = ?", id).Count(&count)
+    if result.Error != nil {
+        c.JSON(500, gin.H{"error": "Erreur lors du décompte"})
+        return
+    }
+
+    c.JSON(200, gin.H{"count": count})
+}
+
 func GetFolderPasswordsController(c *gin.Context) {
 	
 }
