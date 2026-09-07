@@ -3,14 +3,17 @@ package routes
 import(
 	"github.com/gin-gonic/gin"
 	"lockbox/controllers"
+	"lockbox/middlewares"
 )
 
 func PasswordRoute(router *gin.Engine) {
 
-	router.GET("/passwords", controllers.GetAllPasswordController)
-	router.GET("/passwords/:id", controllers.GetPasswordByIDController)
-	router.PUT("/passwords/:id", controllers.UpdatePasswordController)
-	router.DELETE("/passwords/:id", controllers.DeletePasswordController)
-	router.POST("/passwords", controllers.CreatePasswordController)
+	protected := router.Group("/").Use(middlewares.JwtMiddleware())
+
+	protected.GET("/passwords", controllers.GetAllPasswordController)
+	protected.GET("/passwords/:id", controllers.GetPasswordByIDController)
+	protected.PUT("/passwords/:id", controllers.UpdatePasswordController)
+	protected.DELETE("/passwords/:id", controllers.DeletePasswordController)
+	protected.POST("/passwords", controllers.CreatePasswordController)
 	
 }

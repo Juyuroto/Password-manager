@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { authService } from '../services/api';
+import AuthLayout from '../components/AuthLayout';
 import Input from '../components/Input';
 import Button from '../components/Button';
+import '../assets/css/Login.css';
 
-const Login = () => {
+export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
@@ -18,66 +20,55 @@ const Login = () => {
     e.preventDefault();
     setError(null);
     setIsLoading(true);
-
     try {
       const response = await authService.login(email, password);
-
       localStorage.setItem('lockbox_token', response.token);
-      console.log('Connexion réussie', response.user);
-
       navigate('/dashboard');
-
     } catch (err) {
-      setError(err.message || "Email ou mot de passe incorrect");
+      setError(err.message || 'Email ou mot de passe incorrect');
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="login-wrapper">
+    <AuthLayout>
       <div className="login-card">
-        <h1 className="login-title">Lockbox</h1>
-        <p className="login-subtitle">Accédez à votre coffre-fort</p>
+        <div className="login-header">
+          <h1 className="login-title">Bon retour</h1>
+          <p className="login-subtitle">Accédez à votre coffre-fort</p>
+        </div>
 
-        {successMessage && <div className="success-message">{successMessage}</div>}
-        {error && <div className="error-message">{error}</div>}
+        {successMessage && <div className="alert alert-success">{successMessage}</div>}
+        {error && <div className="alert alert-error">{error}</div>}
 
         <form onSubmit={handleSubmit} className="login-form">
           <Input
             label="Adresse email"
             type="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={e => setEmail(e.target.value)}
             placeholder="exemple@domaine.com"
-            required={true}
+            required
           />
-
           <Input
             label="Mot de passe"
             type="password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={e => setPassword(e.target.value)}
             placeholder="••••••••"
-            required={true}
+            required
           />
-
           <Button type="submit" isLoading={isLoading}>
             Se connecter
           </Button>
         </form>
 
-        <div className="auth-footer">
-          <p>
-            Pas encore de compte ?{' '}
-            <Link to="/signup" className="auth-link">
-              Créer un compte
-            </Link>
-          </p>
-        </div>
+        <p className="login-footer">
+          Pas encore de compte ?{' '}
+          <Link to="/signup" className="auth-link">Créer un compte</Link>
+        </p>
       </div>
-    </div>
+    </AuthLayout>
   );
-};
-
-export default Login;
+}

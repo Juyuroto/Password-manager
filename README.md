@@ -103,11 +103,10 @@ lockbox/
 │   ├── config/
 │   ├── controllers/
 │   ├── middlewares/
-│   ├── middlwares/
 │   ├── models/
 │   ├── routes/
 │   ├── services/
-│   ├── dockerfile
+│   ├── Dockerfile
 │   ├── go.mod
 │   ├── go.sum
 │   └── main.go
@@ -131,9 +130,6 @@ lockbox/
 ---
 
 L'application sera disponible sur :
-- Frontend -> http://localhost:3000
-- Backend API -> http://localhost:8080
-- PostgreSQL -> localhost:5432
 - Grand public -> https://lockbox.fr
 
 ---
@@ -143,5 +139,3 @@ L'application sera disponible sur :
 - Les mots de passe maîtres sont hachés avec **bcrypt**
 - Les mots de passe stockés sont chiffrés avec **AES-256-GCM**
 - Les tokens JWT expirent après **24h**
-- Les variables sensibles passent par des **variables d'environnement**
-- Le `.env` est dans le `.gitignore`

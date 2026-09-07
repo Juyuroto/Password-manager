@@ -22,20 +22,21 @@ services:
     container_name: backend
     build:
       context: ./backend
-      dockerfile: dockerfile
+      dockerfile: Dockerfile.dev
     restart: always
     ports:
-      - "${Backend_Port}:3301"
+      - "${Backend_Port}:${Backend_Port}"
     environment:
       - PostgreUser=${PostgreUser}
       - PostgrePassword=${PostgrePassword}
       - PostgreHost=${PostgreHost}
-      - PostgrePort=${PostgreInternalPort}
+      - PostgrePort=${PostgrePort}
       - PostgreName=${PostgreName}
       - BACKEND_PORT=${Backend_Port}
       - FRONTEND_URL=${Frontend_URL}
-      - DEFAULT_USER_NAME=${Default_User_Name}
-      - DEFAULT_USER_PASSWORD=${Default_User_Password}
+      - JWT_SECRET=${JWT_SECRET}
+    volumes:
+      - ./backend:/app:Z
     depends_on:
       database:
         condition: service_healthy

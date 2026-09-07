@@ -6,7 +6,8 @@ type Folder struct {
 	gorm.Model
 	Name      string     `gorm:"not null" json:"name"`
 	Passwords []Password `json:"passwords"`
-	Number	  int		 `json:"number"`
+	UserID    uint       `gorm:"not null" json:"user_id"`
+    User      User       `json:"-"`
 }
 
 type Password struct {
@@ -15,8 +16,9 @@ type Password struct {
 	Type	 string	`gorm:"not null" json:"type"`
 	Login	 string	`gorm:"not null" json:"login"`
 	Password string `gorm:"not null" json:"password"`
-	Lenght	 int 	`gorm:"not null" json:"longueur"`
 	Note	 string	`json:"Note"`
+	UserID   uint   `gorm:"not null" json:"user_id"`
+    User     User   `json:"-"`
 
 	FolderID uint   `json:"folder_id"`
 	Folder   Folder `json:"folder"`
